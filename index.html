@@ -115,7 +115,7 @@
         <!-- BOTTOM INFO PANEL -->
         <footer class="footer">
             <div class="footer-content">                <div class="footer-section">
-                    <h4>Legend</h4>
+                    <h4>Markings</h4>
                     <div class="legend-items">
                         <div class="legend-item">
                             <span class="legend-color" style="background-color: #d32f2f;"></span>
@@ -143,9 +143,92 @@
         </footer>
     </div>
 
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle menu">
+        ☰
+    </button>
+
+    <!-- Mobile Details Toggle Button -->
+    <button class="mobile-details-toggle" id="mobileDetailsBtn" aria-label="Toggle details">
+        ⓘ
+    </button>
+
     <!-- Leaflet JS - MUST come before script.js -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="data.js"></script>
     <script src="script.js"></script>
+
+    <!-- Mobile Menu Handler -->
+    <script>
+        // Mobile menu and details toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDetailsBtn = document.getElementById('mobileDetailsBtn');
+        const sidebar = document.querySelector('.sidebar');
+        const detailsPanel = document.querySelector('.details-panel');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const body = document.body;
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+                body.classList.toggle('overlay-active');
+            });
+        }
+
+        if (mobileDetailsBtn) {
+            mobileDetailsBtn.addEventListener('click', () => {
+                detailsPanel.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+                body.classList.toggle('overlay-active');
+            });
+        }
+
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                detailsPanel.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                body.classList.remove('overlay-active');
+            });
+        }
+
+        // Close panels on ward selection (mobile only)
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.ward-item')) {
+                if (window.innerWidth < 769) {
+                    sidebar.classList.remove('active');
+                    detailsPanel.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                    body.classList.remove('overlay-active');
+                }
+            }
+        });
+
+        // Close details panel on close button
+        const closeBtn = document.getElementById('closeDetails');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                detailsPanel.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                body.classList.remove('overlay-active');
+            });
+        }
+
+        // Prevent scroll when overlay is active
+        const observer = new MutationObserver(() => {
+            if (body.classList.contains('overlay-active')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
+        });
+
+        observer.observe(body, { attributes: true, attributeFilter: ['class'] });
+    </script>
 </body>
 </html>
+``` 
