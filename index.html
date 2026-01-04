@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsoon Risk Dashboard – Delhi</title>
+    <!-- Leaflet CSS - MUST come before custom styles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Monsoon Risk Dashboard – Delhi</h1>
+                    <p class="header-subtitle">Ward-wise Water-Logging Risk Assessment</p>
+                </div>
+                <div class="header-info">
+                    <div class="info-item">
+                        <span class="info-label">Current Rainfall</span>
+                        <span class="info-value" id="rainfallValue">0.0</span>
+                        <span class="info-unit">mm/hr</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Weather Condition</span>
+                        <span class="info-value" id="weatherStatus">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Last Updated</span>
+                        <span class="info-value" id="lastUpdated">Now</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+            <!-- LEFT SIDEBAR - CONTROLS -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Rainfall Scenario</h3>
+                    <p class="sidebar-description">Select rainfall intensity to simulate risk</p>
+                    <div class="rainfall-buttons">
+                        <button class="rainfall-btn active real-time-btn" id="realTimeBtn" onclick="resetToRealWeather()">
+                            <span class="rainfall-label">Real-Time</span>
+                            <span class="rainfall-value">Live Data</span>
+                        </button>
+                        <button class="rainfall-btn" data-rainfall="20">
+                            <span class="rainfall-label">Light</span>
+                            <span class="rainfall-value">20 mm/hr</span>
+                        </button>
+                        <button class="rainfall-btn" data-rainfall="40">
+                            <span class="rainfall-label">Moderate</span>
+                            <span class="rainfall-value">40 mm/hr</span>
+                        </button>
+                        <button class="rainfall-btn" data-rainfall="60">
+                            <span class="rainfall-label">Heavy</span>
+                            <span class="rainfall-value">60 mm/hr</span>
+                        </button>
+                        <button class="rainfall-btn" data-rainfall="100">
+                            <span class="rainfall-label">Extreme</span>
+                            <span class="rainfall-value">100 mm/hr</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Risk Distribution</h3>
+                    <div class="risk-summary">
+                        <div class="risk-item high-risk">
+                            <span class="risk-indicator"></span>
+                            <span class="risk-label">High Risk</span>
+                            <span class="risk-count" id="highRiskCount">0</span>
+                        </div>
+                        <div class="risk-item medium-risk">
+                            <span class="risk-indicator"></span>
+                            <span class="risk-label">Medium Risk</span>
+                            <span class="risk-count" id="mediumRiskCount">0</span>
+                        </div>
+                        <div class="risk-item low-risk">
+                            <span class="risk-indicator"></span>
+                            <span class="risk-label">Low Risk</span>
+                            <span class="risk-count" id="lowRiskCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Select Ward</h3>
+                    <div class="ward-list" id="wardList">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- CENTER - LEAFLET MAP -->
+            <div class="map-container">
+                <div id="map" class="map"></div>
+            </div>
+
+            <!-- RIGHT SIDEBAR - WARD DETAILS -->
+            <aside class="details-panel" id="detailsPanel">
+                <div class="details-header">
+                    <h2 id="wardName">Select a Ward</h2>
+                    <button class="close-btn" id="closeDetails" aria-label="Close details">×</button>
+                </div>
+                <div class="details-content" id="detailsContent">
+                    <p class="placeholder-text">Click on a ward marker on the map to view details</p>
+                </div>
+            </aside>
+        </div>
+
+        <!-- BOTTOM INFO PANEL -->
+        <footer class="footer">
+            <div class="footer-content">                <div class="footer-section">
+                    <h4>Legend</h4>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #d32f2f;"></span>
+                            <span>High Risk Ward (≥ 60%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #f57c00;"></span>
+                            <span>Medium Risk Ward (30-59%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #388e3c;"></span>
+                            <span>Low Risk Ward (< 30%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #ff6b6b; border-radius: 50%;"></span>
+                            <span>Water-Logging Hotspot</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Data Sources & Notice</h4>
+                    <p>Weather data: <strong>OpenWeatherMap API (Real-time)</strong></p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Leaflet JS - MUST come before script.js -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
